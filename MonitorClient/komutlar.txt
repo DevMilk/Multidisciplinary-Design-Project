@@ -1,2 +1,0 @@
-set FLASK_APP=monitor.py
-python -m flask run monitor.py

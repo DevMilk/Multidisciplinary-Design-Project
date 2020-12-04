@@ -31,12 +31,12 @@ public class SeraServiceImpl implements SeraService{
         if(client == null) throw new GreenHouseNotFoundException("No Client found with ip:",ip);
         return client;
     }
-    private void addClient(Map<String,String> valueMap, String ip){
+    public void addClient(Map<String,String> valueMap, String ip){
         clients.put(ip,new GreenHouse(valueMap,ip));
     }
     public void changeClientValue(String ip, Map<String, String> valueMap){
         try {
-            getClientByIp(ip).setValues(valueMap);
+            getClientByIp(ip).getValues().putAll(valueMap);
 
         }catch (GreenHouseNotFoundException e){
             addClient(valueMap,ip);
@@ -46,6 +46,13 @@ public class SeraServiceImpl implements SeraService{
         commands.put(employee,command);
     }
     public synchronized void addCommand(String employee, String valueName,String value){
+
+        try {
+            getClientByIp(employee);
+        } catch(GreenHouseNotFoundException e){
+            e.printStackTrace();
+        }
+
         Map<String,String> param = commands.get(employee);
         if(param == null) {
             commands.put(employee, new HashMap<String, String>());
@@ -68,8 +75,9 @@ public class SeraServiceImpl implements SeraService{
         return aliveCopy;
     }
     public void controlConnection(int total){
+
         for(Map.Entry<String,GreenHouse> client : clients.entrySet())
-            client.getValue().setIsDown(client.getValue().getNextNotificationTime()<TimeService.getTime()+total);
+            client.getValue().setIsDown(client.getValue().getNextNotificationTime() +total < TimeService.getTime());
 
     }
 }

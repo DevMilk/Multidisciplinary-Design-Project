@@ -1,6 +1,8 @@
 package com.cdtp.seraserver.controller;
 
 import com.cdtp.seraserver.Exceptions.GreenHouseNotFoundException;
+import com.cdtp.seraserver.contexts.CommandContext;
+import com.cdtp.seraserver.contexts.ConfigContext;
 import com.cdtp.seraserver.domain.GreenHouse;
 import com.cdtp.seraserver.services.SeraService;
 import com.cdtp.seraserver.services.SeraServiceImpl;
@@ -22,14 +24,14 @@ public class SeraController {
     // 1000 ms = 1 s
     private int notificationPeriod = 5;
     private int TIME_OUT_S = 3;
-    private Boolean ONLY_MONITOR_READS = true;
+    private Boolean ONLY_MONITOR_READS = false;
 
     @Autowired
     private SeraService seraService;
 
 
     //TODO:
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Map<String,GreenHouse>> getAll(HttpServletRequest request) {
         if(ONLY_MONITOR_READS){
             try{
@@ -42,49 +44,52 @@ public class SeraController {
     }
 
     //Change valueName field of greenhouse where the ip address belongs with the value that given by the monitor client
-    @PostMapping("/")
-    public ResponseEntity<Void> changeValue(@RequestParam String ip, @RequestParam String valueName, @RequestParam float value) {
+    @PostMapping("")
+    public ResponseEntity changeValue(@RequestBody(required = true) CommandContext requestBody) {
         //Clientlerle haberleşip onlara değiştirmelerini söylemeli.
-        seraService.addCommand(ip,valueName,Float.toString(value));
+        if(requestBody.getIp()== null || requestBody.getValue()==null || requestBody.getValueName()==null)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not All Parameters not provided");
+        seraService.addCommand(requestBody.getIp(),requestBody.getValueName(),Float.toString(requestBody.getValue()));
         return ResponseEntity.ok().build();
     }
 
     //Get status information about clients
-    @PostMapping("/notify")
-    public ResponseEntity<Void> getNotifiedFromClients(HttpServletRequest request, @RequestBody Map<String,String> valueMap) throws GreenHouseNotFoundException {
+    @PostMapping("/notification")
+    public ResponseEntity notification(HttpServletRequest request, @RequestBody(required = false) Map<String,String> valueMap) {
         String ip_address = getIpOfRequest(request);
-        seraService.changeClientValue(ip_address,valueMap);
-
-        seraService.getClientByIp(ip_address).setNextNotificationTime(TimeService.getTime()+notificationPeriod*1000);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/notify")
-    public ResponseEntity notifyToClients(HttpServletRequest request) {
-
         Map<String,String> response = new HashMap<>(2);
+        GreenHouse client = null;
         try {
-            response = seraService.removeCommand(getIpOfRequest(request));
+            //Kayıtlıysa:
+
+            client = seraService.getClientByIp(ip_address); // client'ı al
+            response = seraService.removeCommand(ip_address); //client'a komutu bildir
 
         } catch(GreenHouseNotFoundException e){
+            //Kayıtlı Değilse:
 
-            //Bulunamamışsa ve kapasite dolu değilse senkronizasyon yapılır.
-            if(seraService.getClients().size()<seraService.getCapacity())
-                response.put("sync_period",Integer.toString(this.notificationPeriod));
+            if(seraService.getClients().size()<seraService.getCapacity()){
+                seraService.addClient(new HashMap<>(),ip_address);
+                response.put("sync_period",Integer.toString(this.notificationPeriod)); //Eğer yer varsa client'ı kayıt et ve senkron et
+                client = seraService.getClients().get(ip_address);
+            }
             else
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Sera Client Capacity Reached. Cannot add another Sera Client.");
         }
+        if(valueMap!=null && !valueMap.isEmpty())
+            seraService.changeClientValue(ip_address,valueMap); //valueMap sağlanmışsa değişimi gerçekleştir
+        client.setNextNotificationTime(TimeService.getTime()+notificationPeriod*1000);
 
         return ResponseEntity.ok(response);
     }
 
 
 
-    @GetMapping("/server_configure/{period}{timeout}{readAuth}")
-    public ResponseEntity<Void> configure(@PathVariable Optional<Integer> period, @PathVariable Optional<Integer> timeout, @PathVariable Optional<Boolean> readAuth){
-        this.notificationPeriod = period.isPresent() ? period.get() : this.notificationPeriod;
-        this.TIME_OUT_S = timeout.isPresent() ? timeout.get() : this.TIME_OUT_S;
-        this.ONLY_MONITOR_READS = readAuth.isPresent() ? readAuth.get() : this.ONLY_MONITOR_READS;
+    @PostMapping("/server_configure")
+    public ResponseEntity<Void> configure(@RequestBody ConfigContext requestBody){
+        this.notificationPeriod = requestBody.getPeriod()!=-1 ? requestBody.getPeriod() : this.notificationPeriod;
+        this.TIME_OUT_S = requestBody.getTimeout()!=-1 ? requestBody.getTimeout()  : this.TIME_OUT_S;
+        this.ONLY_MONITOR_READS = requestBody.getReadAuth()!=null ? requestBody.getReadAuth() : this.ONLY_MONITOR_READS;
 
         seraService.addCommandToAllEmployees("sync_period",Integer.toString(this.notificationPeriod));
 
