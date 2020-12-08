@@ -1,0 +1,87 @@
+:root{
+	--bg: linear-gradient(45deg, rgba(25,90,85,1) 15%, rgb(195 182 94) 100%);
+	--cardbg: linear-gradient(45deg, rgb(36 96 86) 15%, rgb(121 142 90) 72%);
+	--rowbg: #105057;
+	--fontcolor: #d3dfd2;
+	--shadow: #72813c;
+}
+
+html{
+	background: var(--bg);
+	height: 100vh;
+	background-size: 120% 120%;
+	animation: gradient 20s ease infinite;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+.indicators{
+	min-height: min-content;
+	min-width: 50vh;
+	width: min-content;
+	background: var(--cardbg);
+	
+	margin: auto;
+	margin-top: 10vh;
+	border-radius: 6px;
+	padding: 30px;
+	opacity: 0.95;
+}
+
+.hover{
+	
+transition: all .5s;
+}
+.hover:hover{
+	
+box-shadow: -15px 15px var(--shadow);
+position: relative;
+transform: translate(15px,-15px);
+}
+
+.indicator{
+	padding: 2vh;
+	text-align: center;
+	font-family: 'Work Sans', sans-serif;
+	font-size: xx-large;
+	font-weight: 500;
+	color: var(--fontcolor);
+	background: var(--rowbg);
+	border: 2px solid var(--cardbg);
+	border-radius: 2px;
+	opacity: 0.96;
+	align-self: center;
+}
+
+.grid-container{
+box-sizing: inherit;
+display: grid;
+grid-template-columns: 1fr 2fr .7fr;
+	
+}
+
+.grid-container div{
+	border: 1px solid;
+	border-radius: 3px 0px;
+	box-shadow: -2px 2px;
+	
+}
+
+.def{
+box-sizing: inherit;
+display: flex;
+align-items: center;
+justify-content: center;
+grid-row-start: 1;
+grid-row-end: 4;
+	
+	
+}
