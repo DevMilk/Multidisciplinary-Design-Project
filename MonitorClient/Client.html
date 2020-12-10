@@ -3,7 +3,6 @@
 <head>
 	<title>Sera Monitor</title>
 <link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
 
 <link href="https://fonts.googleapis.com/css?family=Montserrat:900|Work+Sans:300" rel="stylesheet">
 </head>
@@ -11,7 +10,7 @@
 <body>
 
 <div class="indicators hover">
-
+<div class="header">Monitor</div>
 <div class="indicator grid-container hover">
             <div class="def">Sera#1</div>
             <div>Temperature</div>
@@ -37,7 +36,7 @@
             <div>42%</div>
 			
 </div>
-<div class="indicator grid-container hover">
+<div class="indicator grid-container hover Down">
             <div class="def">Sera#4</div>
             <div>Temperature</div>
             <div>29C</div>
@@ -46,5 +45,27 @@
 </div>
 
 </div>
+
+
+
+
+<div class="indicators hover">
+<div class="header">Settings</div>
+<div class="indicator grid-container">
+	<div>Refresh Period</div>
+	<div>Timeout</div>
+	<div>Notify Period </div>
+	<input type="number" name="refreshPeriod">
+	<input type="number" name="timeout">
+	<input type="number" name="notifyPeriod">
+	<button class="submit">Submit</button>
+</div>
+
+
+</div>
 </body>
+
+<script src="script.js"></script>
+<script src="eventListeners.js"></script>
+
 </html>

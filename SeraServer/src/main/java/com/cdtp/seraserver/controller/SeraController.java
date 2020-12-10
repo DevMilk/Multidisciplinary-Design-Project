@@ -89,7 +89,6 @@ public class SeraController {
     public ResponseEntity<Void> configure(@RequestBody ConfigContext requestBody){
         this.notificationPeriod = requestBody.getPeriod()!=-1 ? requestBody.getPeriod() : this.notificationPeriod;
         this.TIME_OUT_S = requestBody.getTimeout()!=-1 ? requestBody.getTimeout()  : this.TIME_OUT_S;
-        this.ONLY_MONITOR_READS = requestBody.getReadAuth()!=null ? requestBody.getReadAuth() : this.ONLY_MONITOR_READS;
 
         seraService.addCommandToAllEmployees("sync_period",Integer.toString(this.notificationPeriod));
 

@@ -12,5 +12,4 @@ import lombok.Setter;
 public class ConfigContext {
     private int period = -1;
     private int timeout = -1 ;
-    private Boolean readAuth;
 }

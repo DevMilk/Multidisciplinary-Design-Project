@@ -3,14 +3,24 @@
 	--cardbg: linear-gradient(45deg, rgb(36 96 86) 15%, rgb(121 142 90) 72%);
 	--rowbg: #105057;
 	--fontcolor: #d3dfd2;
-	--shadow: #72813c;
+	--shadow: #13413e;
+	--Down: #72813c
+	
 }
 
 html{
-	background: var(--bg);
-	height: 100vh;
-	background-size: 120% 120%;
-	animation: gradient 20s ease infinite;
+	
+	font-family: 'Work Sans', sans-serif;
+	font-size: x-large;
+	font-weight: 500;
+	color: var(--fontcolor);
+background: var(--bg);
+	
+height: 100vh;
+	
+background-size: 120% 120%;
+	
+animation: gradient 20s ease infinite;
 }
 @keyframes gradient {
 	0% {
@@ -25,14 +35,14 @@ html{
 }
 .indicators{
 	min-height: min-content;
-	min-width: 50vh;
+	min-width: 80vh;
 	width: min-content;
 	background: var(--cardbg);
-	
+	border: 4px double #edf1ea;
 	margin: auto;
 	margin-top: 10vh;
 	border-radius: 6px;
-	padding: 30px;
+	padding: 20px;
 	opacity: 0.95;
 }
 
@@ -42,20 +52,16 @@ transition: all .5s;
 }
 .hover:hover{
 	
-box-shadow: -15px 15px var(--shadow);
+box-shadow: -20px 20px var(--shadow);
 position: relative;
-transform: translate(15px,-15px);
+transform: translate(20px,-20px);
 }
 
 .indicator{
 	padding: 2vh;
 	text-align: center;
-	font-family: 'Work Sans', sans-serif;
-	font-size: xx-large;
-	font-weight: 500;
-	color: var(--fontcolor);
 	background: var(--rowbg);
-	border: 2px solid var(--cardbg);
+	border: 6px double #6c875a;
 	border-radius: 2px;
 	opacity: 0.96;
 	align-self: center;
@@ -64,7 +70,7 @@ transform: translate(15px,-15px);
 .grid-container{
 box-sizing: inherit;
 display: grid;
-grid-template-columns: 1fr 2fr .7fr;
+grid-template-columns: 1fr 1fr .7fr;
 	
 }
 
@@ -82,6 +88,32 @@ align-items: center;
 justify-content: center;
 grid-row-start: 1;
 grid-row-end: 4;
+}
+.Down{
 	
-	
+}
+input{
+	background: black;
+	color: white;
+	text-align: center;
+	border: 1px solid #e5ebe2;
+}
+.header{
+	text-align: center;
+	font-size: xx-large;
+	position: relative;
+	bottom: 10px;
+	text-shadow: -3px 3px #115156;
+	font-weight: bold;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button{
+	grid-column-start:1;
+	grid-column-end: 4;
 }
