@@ -1,10 +1,12 @@
 const IP_ADDRESS = "192.168.1.38"
 const PORT = "8080"
 const root_endpoint = "http://"+IP_ADDRESS+":"+PORT+"/sera";
-const PERIOD = 1; //Saniye cinsinden refresh
-function getAll(){
+let PERIOD = 1; //Saniye cinsinden refresh
+
+function GET(enpoint_prefix,handleFunction){
+	
 	const xhr = new XMLHttpRequest();
-	xhr.open("GET", root_endpoint);
+	xhr.open("GET", root_endpoint+enpoint_prefix);
     xhr.send();
     xhr.onreadystatechange = function () {
       if (this.readyState === 4   && 
@@ -13,63 +15,80 @@ function getAll(){
 			  if(this.responseText=="")
 				  return
 			  result = JSON.parse(this.responseText);
-			  handle(result);
+			  handleFunction(result);
 		  }
     }
-	
 }
-
-function change(ip,valueName,value){
-	const xhr = new XMLHttpRequest();   // new HttpRequest instance 
-	var requestBody = {"ip":ip,"valueName":valueName,"value":value};
-	xhr.open("POST", root_endpoint);
-	xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify(requestBody));
-	
-	
-}
-function configure(period,timeout){
-	if((isNaN(timeout)) && (isNaN(period)))
-		return;
-	
-	const xhr = new XMLHttpRequest();   // new HttpRequest instance 
-	var requestBody = {}
-
-	if(!isNaN(period) && period!="")
-		requestBody["period"] = period;
-		
-	if(!isNaN(timeout) && timeout!="")
-		requestBody["timeout"] = timeout;
-		
+function POST(endpoint_prefix, requestBody){
 	console.log(requestBody);
-	xhr.open("POST", root_endpoint+"/configure");
+	const xhr = new XMLHttpRequest();   // new HttpRequest instance 
+	xhr.open("POST", root_endpoint+endpoint_prefix);
 	xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(requestBody));
+}
+function log(str){
+	let cons = document.getElementById("console");
+	var today = new Date();
+	var time = today.getHours() + ":" + today.getMinutes();
+	cons.innerHTML = cons.innerHTML + time + ": "+str+"<br>";
 	
+}
+function logValueChange(valueName,value, seraName=""){
+	
+	let str = "Requested value "+value+" for "+valueName;
+	let prefix = seraName=="" ? "" : " of "+seraName;
+	
+	log(str+prefix);
+}
+function getAll(){
+	GET("",handle);
+}
+function configHandle(result){
+	let configMonitor = document.getElementsByClassName("indicators")[1];
+	let indicators = configMonitor.getElementsByClassName("indicator");
+	document.querySelector("#periodIndicator > div:nth-child(2)").innerText = result[0];
+	document.querySelector("#timeoutIndicator > div:nth-child(2)").innerText = result[1];
 }
 function handle(result){
 	//Bu Json değerini html'de göstergelerle göster
-		console.log(result);
+		//console.log("Result: ",result);
 		for (var key in result){ 
-			for(valueName in result[key]){
-				let value = result[key][valueName];
-				console.log(key,"temperature",value);
-				addOrChangeSera(key,toPascalCase(valueName),value);
+			for(valueName in result[key]["values"]){
+				let value = result[key]["values"][valueName];
+				//console.log(key,"temperature",value);
+				addOrChangeSera(key,toPascalCase(valueName),value,result[key]["isDown"]);
 			}
 		}
 }
 
 
-
-function httpGet(theUrl)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
+function getConfig(){
+	GET("/server_configure",configHandle);
 }
-/*getAll();
-setInterval(getAll,PERIOD*1000);*/
 
+
+function change(ip,valueName,value){
+	
+	var requestBody = {"ip":ip,"valuename":valueName,"value":value};
+	console.log(requestBody);
+	POST("",requestBody);
+	logValueChange(valueName,value,ip);
+}
+function configure(valueName,value){
+	console.log(valueName,value);
+	if(valueName.toLowerCase()!="period" && valueName.toLowerCase()!="timeout")
+		return;
+	
+	var requestBody = {};
+	requestBody[valueName]=value;
+	POST("/server_configure",requestBody);
+	logValueChange(valueName,value);
+}
+
+
+getAll();
+setInterval(getAll,PERIOD*1000);
+getConfig();
+setInterval(getConfig,PERIOD*1000);
 
 console.log("set");

@@ -10,39 +10,39 @@
 <body>
 
 <div class="indicators hover">
-<div class="header">Monitor</div>
-<div class="indicator grid-container hover">
-            <div class="def">Sera#1</div>
-            <div>Temperature</div>
-            <div>30C</div>
-            <div>Humidity</div>
-            <div>25%</div>
-</div>
+	<div class="header">Monitor</div>
+	<!--<div class="indicator grid-container hover">
+				<div class="def">Sera#1</div>
+				<div>Temperature</div>
+				<div>30C</div>
+				<div>Humidity</div>
+				<div>25%</div>
+	</div>
 
-<div class="indicator grid-container hover">
-            <div class="def">Sera#2</div>
-            <div>Temperature</div>
-            <div>45C</div>
-            <div>Humidity</div>
-            <div>40%</div>
-			
-</div>
+	<div class="indicator grid-container hover">
+				<div class="def">Sera#2</div>
+				<div>Temperature</div>
+				<div>45C</div>
+				<div>Humidity</div>
+				<div>40%</div>
+	</div>
 
-<div class="indicator grid-container hover">
-            <div class="def">Sera#3</div>
-            <div>Temperature</div>
-            <div>37C</div>
-            <div>Humidity</div>
-            <div>42%</div>
-			
-</div>
-<div class="indicator grid-container hover Down">
-            <div class="def">Sera#4</div>
-            <div>Temperature</div>
-            <div>29C</div>
-            <div>Humidity</div>
-            <div>10%</div>
-</div>
+	<div class="indicator grid-container hover">
+				<div class="def">Sera#3</div>
+				<div>Temperature</div>
+				<div>37C</div>
+				<div>Humidity</div>
+				<div>42%</div>
+				
+	</div>
+	
+	<div class="indicator grid-container hover Down">
+				<div class="def">Sera#4</div>
+				<div>Temperature</div>
+				<div>29C</div>
+				<div>Humidity</div>
+				<div>10%</div>
+	</div>-->
 
 </div>
 
@@ -50,22 +50,25 @@
 
 
 <div class="indicators hover">
-<div class="header">Settings</div>
-<div class="indicator grid-container">
-	<div>Refresh Period</div>
-	<div>Timeout</div>
-	<div>Notify Period </div>
-	<input type="number" name="refreshPeriod">
-	<input type="number" name="timeout">
-	<input type="number" name="notifyPeriod">
-	<button class="submit">Submit</button>
+	<div class="header">Settings</div>
+	<div id="periodIndicator" class="indicator hover grid-container col2">
+		<div class="def">Period</div>
+		<div>-1</div>
+	</div>
+	<div id="timeoutIndicator" class="indicator hover grid-container col2">
+		<div class="def">Timeout</div>
+		<div>-1</div>
+	</div>
 </div>
+
+
+<div id="console">
 
 
 </div>
 </body>
 
-<script src="script.js"></script>
-<script src="eventListeners.js"></script>
+<script  type="text/javascript" src="script.js"></script>
+<script  type="text/javascript" src="eventListeners.js"></script>
 
 </html>

@@ -47,9 +47,9 @@ public class SeraController {
     @PostMapping("")
     public ResponseEntity changeValue(@RequestBody(required = true) CommandContext requestBody) {
         //Clientlerle haberleşip onlara değiştirmelerini söylemeli.
-        if(requestBody.getIp()== null || requestBody.getValue()==null || requestBody.getValueName()==null)
+        if(requestBody.getIp()== null || requestBody.getValue()==0 || requestBody.getValuename()==null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not All Parameters not provided");
-        seraService.addCommand(requestBody.getIp(),requestBody.getValueName(),Float.toString(requestBody.getValue()));
+        seraService.addCommand(requestBody.getIp(),requestBody.getValuename(),Integer.toString(requestBody.getValue()));
         return ResponseEntity.ok().build();
     }
 
@@ -95,7 +95,10 @@ public class SeraController {
         return ResponseEntity.ok().build();
     }
 
-
+    @GetMapping("/server_configure")
+    public ResponseEntity configure(){
+        return ResponseEntity.ok(new int[]{this.notificationPeriod,this.TIME_OUT_S});
+    }
     private String getIpOfRequest(HttpServletRequest request) {
         //{sec-fetch-mode=cors, content-length=95, referer=http://127.0.0.1:8080/swagger-ui.html, sec-fetch-site=same-origin, accept-language=tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7, origin=http://127.0.0.1:8080, dnt=1, accept=*/*, host=127.0.0.1:8080, connection=keep-alive, content-type=application/json, accept-encoding=gzip, deflate, br, user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36, sec-fetch-dest=empty}
         return request.getRemoteAddr();

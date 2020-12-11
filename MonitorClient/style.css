@@ -18,7 +18,7 @@ background: var(--bg);
 	
 height: 100vh;
 	
-background-size: 120% 120%;
+background-size: 150% 150%;
 	
 animation: gradient 20s ease infinite;
 }
@@ -35,7 +35,7 @@ animation: gradient 20s ease infinite;
 }
 .indicators{
 	min-height: min-content;
-	min-width: 80vh;
+	min-width: 45vw;
 	width: min-content;
 	background: var(--cardbg);
 	border: 4px double #edf1ea;
@@ -80,6 +80,9 @@ grid-template-columns: 1fr 1fr .7fr;
 	box-shadow: -2px 2px;
 	
 }
+.col2{
+	grid-template-columns: 3fr 1fr;
+}
 
 .def{
 box-sizing: inherit;
@@ -90,7 +93,7 @@ grid-row-start: 1;
 grid-row-end: 4;
 }
 .Down{
-	
+	background: black;
 }
 input{
 	background: black;
@@ -116,4 +119,77 @@ input::-webkit-inner-spin-button {
 button{
 	grid-column-start:1;
 	grid-column-end: 4;
+	font-size: x-large;
+	font-family: inherit;
+	margin-top: 10px;
+	background-color: #175457;
+	border-radius: 25px;
+	box-shadow: -5px 5px #060a07;
+	border-color: #d1dcd5;
+	padding: 0;
+	outline: none;
+	cursor: pointer;
+	color: #c9d6c6;
+	transition: background .2s;
+}
+button:hover{
+	background-color: white;
+	
+}
+button:active{
+	transform: translate(-5px,5px);
+	box-shadow: none;
+	
+}
+.attribHover{
+}
+.attribHover:hover{
+	cursor:pointer;
+	background: #a3a45c;
+}
+
+#console{
+	position: absolute;
+	bottom: 0px;
+	left:0px;
+	min-width:5vw;
+	cursor: text;
+	min-height: 3vh;
+	background-color: black;
+	border-radius: 10px 10px 10px 0px;
+	border: 1px double #e5ebe2;
+	transition: all .5s ease;
+	content-visibility: hidden;
+	max-height: 40vh;
+	overflow-y: scroll;
+	font-size: large;
+	overflow-x: overlay;
+	max-width: 20vw;
+}
+
+#console:hover{
+	min-width: 20vw;
+	min-height: 40vh;
+	content-visibility: visible;
+}
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(255,0,0,0.8); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,0,0,0.4); 
 }

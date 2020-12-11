@@ -10,7 +10,7 @@ public class CommandContext {
     @NonNull
     private String ip;
     @NonNull
-    private String valueName;
+    private String valuename;
     @NonNull
-    private Float value;
+    private int value;
 }

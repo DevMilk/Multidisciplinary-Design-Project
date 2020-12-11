@@ -1,27 +1,34 @@
 
-function rightClickFunction(event) {
-	if(event.which!=3)
-		return
-  var txt;
-  do{
-	  
-  var value = prompt("Enter the requested value of "+event.target.innerHTML+":");
-  if(value==null)
-	  return
-  if (value != parseInt(value, 10)){
-	  alert("Only enter numbers");
-  }
-  }while(value != parseInt(value, 10));
+function getInput(valueName){
+	do{
+		var value = prompt("Enter the requested value of "+valueName+":");
+		if(value==null)
+		  return
 
-  alert("Request Send");
+		if (value != parseInt(value, 10)|| value <=0)
+		  alert("Only enter numbers");
+	  
+	}while(value != parseInt(value, 10) || value <=0);
+
+	return value;
+  
 }
-var monitor = document.querySelector("body > div:nth-child(1)");
-var indicators = monitor.getElementsByClassName("indicator");
-for(var i =0;i<indicators.length; i++){
-	let cells = indicators[i].getElementsByTagName("div");
-	for(var j = 1; j<cells.length; j+=2){
-		cells[j].onclick = rightClickFunction;
-	}
+
+
+function monitorClickFunc(event) {
+	let valueName = event.target.innerHTML;
+	let targetName = event.target.parentElement.getElementsByClassName("def")[0].innerText;
+	let value = getInput(valueName);
+	valueName = valueName.toLowerCase();
+	change(targetName,valueName,value);
+}
+
+function configClickFunc(event){
+	let valueName = event.target.innerHTML;
+	let targetName = event.target.parentElement.getElementsByClassName("def")[0].innerText;
+	let value = getInput(valueName);
+	valueName = valueName.toLowerCase();
+	configure(valueName,value);
 }
 
 
@@ -34,7 +41,19 @@ function toPascalCase(str) {
     }
     return arr.join(" ");
 }
-
+function changeVal(indicatorList,valueName,value){
+	let indicators = indicatorList.getElementsByClassName("indicator");
+	for(var i=0;i<indicators.length;i++){
+		let cells = indicators[i].getElementsByTagName("div");
+		for(var j = 0; j<cells.length; j++){
+				if(cells[j].innerText==toPascalCase(valueName)){
+					cells[j+1].innerText = value;
+					return true;
+				}
+		}
+	}
+	return false;
+}
 function changeValue(indicatorElement,valueName,value){
 	let cells = indicatorElement.getElementsByTagName("div");
 	for(var j = 1; j<cells.length; j+=2){
@@ -51,36 +70,40 @@ function changeIfSeraExists(name,valueName,value){
 	var indicators = monitor.getElementsByClassName("indicator");
 	for(var i =0;i<indicators.length; i++){
 		if(indicators[i].getElementsByTagName("div")[0].innerText==name){
-			console.log("BE");
 			changeValue(indicators[i],valueName,value);
 			return true;
 		}
 	}
 	return false;
 }
-function addOrChangeSera(name,valueName,value){
+function addOrChangeSera(name,valueName,value,isDown=false){
 	var monitor = document.querySelector("body > div:nth-child(1)");
+	monitor.innerHTML = "";
 	if(changeIfSeraExists(name,valueName,value)==false){
-		monitor.insertAdjacentHTML("beforeend","<div> \
-								<div class='indicator grid-container hover'> \
+		let Down = isDown ? " Down" : "";
+		console.log(Down);
+		let html = "<div> \
+								<div class='indicator grid-container hover"+Down+"'> \
 									<div class='def'>"+name+"</div> \
 									<div>"+toPascalCase(valueName)+"</div> \
 									<div>"+value+"C</div> \
 							</div> \
-							");
+							";
+		monitor.insertAdjacentHTML("beforeend",html);
 	}
-	
+	var indicators = document.getElementsByClassName("indicators")[0].getElementsByClassName("indicator");
+	for(var i=0;i<indicators.length;i++){
+		let cells = indicators[i].getElementsByTagName("div");
+		for(var j = 1; j<cells.length; j+=2){
+			if(cells[j].onclick==null){
+				cells[j].onclick = monitorClickFunc;
+				cells[j].classList.add("attribHover");
+			}
+		}
+	}
 }
 
-
-function requestSettings(){
-	let inputs = document.getElementsByTagName("input");
-	
-	let period = parseFloat(inputs[0].value);
-	let timeout = parseFloat(inputs[1].value);
-	let notifyPeriod = parseFloat(inputs[2].value);
-	configure(notifyPeriod,timeout);
-	
-}
-var btn = document.getElementsByClassName("submit")[0];
-btn.onmousedown = requestSettings;
+document.querySelector("#periodIndicator > div.def").onclick = configClickFunc;
+document.querySelector("#timeoutIndicator > div.def").onclick = configClickFunc;
+document.querySelector("#periodIndicator > div.def").classList.add("attribHover");
+document.querySelector("#timeoutIndicator > div.def").classList.add("attribHover");
