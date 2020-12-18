@@ -11,6 +11,7 @@ import java.util.Map;
 public class GreenHouse {
     private Map<String,String> values;
     private String ip;
+    private String name;
     private Boolean isDown;
     private long nextNotificationTime;
     public GreenHouse(Map<String, String> values, String ip) {

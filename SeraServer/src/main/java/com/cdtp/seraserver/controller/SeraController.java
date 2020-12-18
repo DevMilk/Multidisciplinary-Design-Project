@@ -45,11 +45,15 @@ public class SeraController {
 
     //Change valueName field of greenhouse where the ip address belongs with the value that given by the monitor client
     @PostMapping("")
-    public ResponseEntity changeValue(@RequestBody(required = true) CommandContext requestBody) {
+    public ResponseEntity changeValue(@RequestBody(required = true) CommandContext requestBody) throws GreenHouseNotFoundException {
+        System.out.println(requestBody.getName()+requestBody.getValuename()+requestBody.getValue());
         //Clientlerle haberleşip onlara değiştirmelerini söylemeli.
-        if(requestBody.getIp()== null || requestBody.getValue()==0 || requestBody.getValuename()==null)
+        if(requestBody.getName()== null ||  requestBody.getValuename()==null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not All Parameters not provided");
-        seraService.addCommand(requestBody.getIp(),requestBody.getValuename(),Integer.toString(requestBody.getValue()));
+        String ip = seraService.getIpFromName(requestBody.getName());
+        System.out.println("\n"+ip);
+        seraService.addCommand(ip,requestBody.getValuename(),Integer.toString(requestBody.getValue()));
+        System.out.println(seraService.getCommand(ip));
         return ResponseEntity.ok().build();
     }
 
@@ -57,20 +61,22 @@ public class SeraController {
     @PostMapping("/notification")
     public ResponseEntity notification(HttpServletRequest request, @RequestBody(required = false) Map<String,String> valueMap) {
         String ip_address = getIpOfRequest(request);
+        System.out.println(ip_address+" "+valueMap);
         Map<String,String> response = new HashMap<>(2);
         GreenHouse client = null;
+
         try {
             //Kayıtlıysa:
 
             client = seraService.getClientByIp(ip_address); // client'ı al
-            response = seraService.removeCommand(ip_address); //client'a komutu bildir
-
+            Map<String,String> newCommand = seraService.getCommand(ip_address); //client'a komutu bildir
+            if(newCommand!=null)
+                response.putAll(newCommand);
         } catch(GreenHouseNotFoundException e){
             //Kayıtlı Değilse:
 
             if(seraService.getClients().size()<seraService.getCapacity()){
                 seraService.addClient(new HashMap<>(),ip_address);
-                response.put("sync_period",Integer.toString(this.notificationPeriod)); //Eğer yer varsa client'ı kayıt et ve senkron et
                 client = seraService.getClients().get(ip_address);
             }
             else
@@ -80,6 +86,8 @@ public class SeraController {
             seraService.changeClientValue(ip_address,valueMap); //valueMap sağlanmışsa değişimi gerçekleştir
         client.setNextNotificationTime(TimeService.getTime()+notificationPeriod*1000);
 
+        response.put("sync_period",Integer.toString(this.notificationPeriod)); //Eğer yer varsa client'ı kayıt et ve senkron et
+        System.out.println(response);
         return ResponseEntity.ok(response);
     }
 

@@ -32,11 +32,13 @@ public class SeraServiceImpl implements SeraService{
         return client;
     }
     public void addClient(Map<String,String> valueMap, String ip){
-        clients.put(ip,new GreenHouse(valueMap,ip));
+        GreenHouse newSera = new GreenHouse(valueMap,ip);
+        newSera.setName("Sera#"+clients.size());
+        clients.put(ip,newSera);
     }
     public void changeClientValue(String ip, Map<String, String> valueMap){
         try {
-            getClientByIp(ip).getValues().putAll(valueMap);
+            getClientByIp(ip).setValues(valueMap);
 
         }catch (GreenHouseNotFoundException e){
             addClient(valueMap,ip);
@@ -68,10 +70,9 @@ public class SeraServiceImpl implements SeraService{
                 addCommand(client.getKey(),valueName,value);
     }
 
-    public Map<String,String> removeCommand(String employee) throws GreenHouseNotFoundException {
+    public Map<String,String> getCommand(String employee) throws GreenHouseNotFoundException {
         getClientByIp(employee);
         Map<String,String> aliveCopy = commands.get(employee);
-        commands.remove(employee);
         return aliveCopy;
     }
     public void controlConnection(int total){
@@ -79,5 +80,12 @@ public class SeraServiceImpl implements SeraService{
         for(Map.Entry<String,GreenHouse> client : clients.entrySet())
             client.getValue().setIsDown(client.getValue().getNextNotificationTime() +total < TimeService.getTime());
 
+    }
+    public String getIpFromName(String name){
+        for(Map.Entry<String,GreenHouse> client : clients.entrySet()){
+            if(client.getValue().getName().equals(name))
+                return client.getValue().getIp();
+        }
+        return null;
     }
 }

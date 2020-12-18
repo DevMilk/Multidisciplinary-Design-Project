@@ -4,8 +4,7 @@
 	--rowbg: #105057;
 	--fontcolor: #d3dfd2;
 	--shadow: #13413e;
-	--Down: #72813c
-	
+	--Down: #607D8B;
 }
 
 html{
@@ -93,7 +92,8 @@ grid-row-start: 1;
 grid-row-end: 4;
 }
 .Down{
-	background: black;
+	background: var(--Down);
+	pointer-events: none;
 }
 input{
 	background: black;
@@ -142,6 +142,7 @@ button:active{
 	
 }
 .attribHover{
+	
 }
 .attribHover:hover{
 	cursor:pointer;

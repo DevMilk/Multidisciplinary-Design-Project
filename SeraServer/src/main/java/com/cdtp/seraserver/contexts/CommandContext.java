@@ -8,7 +8,7 @@ import lombok.*;
 @RequiredArgsConstructor
 public class CommandContext {
     @NonNull
-    private String ip;
+    private String name;
     @NonNull
     private String valuename;
     @NonNull

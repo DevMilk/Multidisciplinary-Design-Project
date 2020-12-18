@@ -1,4 +1,4 @@
-const IP_ADDRESS = "192.168.1.38"
+const IP_ADDRESS = "25.45.128.215"
 const PORT = "8080"
 const root_endpoint = "http://"+IP_ADDRESS+":"+PORT+"/sera";
 let PERIOD = 1; //Saniye cinsinden refresh
@@ -20,7 +20,6 @@ function GET(enpoint_prefix,handleFunction){
     }
 }
 function POST(endpoint_prefix, requestBody){
-	console.log(requestBody);
 	const xhr = new XMLHttpRequest();   // new HttpRequest instance 
 	xhr.open("POST", root_endpoint+endpoint_prefix);
 	xhr.setRequestHeader("Content-Type", "application/json");
@@ -52,12 +51,15 @@ function configHandle(result){
 function handle(result){
 	//Bu Json değerini html'de göstergelerle göster
 		//console.log("Result: ",result);
+		monitor.innerHTML = "";
+		let valueName = "temperature";
 		for (var key in result){ 
-			for(valueName in result[key]["values"]){
-				let value = result[key]["values"][valueName];
+			/*for(valueName in result[key]["values"]){
+				var value = result[key]["values"][valueName];
 				//console.log(key,"temperature",value);
-				addOrChangeSera(key,toPascalCase(valueName),value,result[key]["isDown"]);
-			}
+			}*/
+			
+			addOrChangeSera(result[key]["name"],toPascalCase(valueName),result[key]["values"][valueName],result[key]["isDown"]);
 		}
 }
 
@@ -67,15 +69,13 @@ function getConfig(){
 }
 
 
-function change(ip,valueName,value){
+function change(SeraName,valueName,value){
 	
-	var requestBody = {"ip":ip,"valuename":valueName,"value":value};
-	console.log(requestBody);
+	var requestBody = {"name":SeraName,"valuename":valueName,"value":value};
 	POST("",requestBody);
-	logValueChange(valueName,value,ip);
+	logValueChange(valueName,value,SeraName);
 }
 function configure(valueName,value){
-	console.log(valueName,value);
 	if(valueName.toLowerCase()!="period" && valueName.toLowerCase()!="timeout")
 		return;
 	

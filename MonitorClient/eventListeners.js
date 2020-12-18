@@ -1,4 +1,5 @@
-
+var monitor = document.querySelector("body > div:nth-child(1)");
+monitor.innerHTML = "";
 function getInput(valueName){
 	do{
 		var value = prompt("Enter the requested value of "+valueName+":");
@@ -66,7 +67,6 @@ function changeValue(indicatorElement,valueName,value){
 	return false;
 }
 function changeIfSeraExists(name,valueName,value){
-	var monitor = document.querySelector("body > div:nth-child(1)");
 	var indicators = monitor.getElementsByClassName("indicator");
 	for(var i =0;i<indicators.length; i++){
 		if(indicators[i].getElementsByTagName("div")[0].innerText==name){
@@ -77,20 +77,22 @@ function changeIfSeraExists(name,valueName,value){
 	return false;
 }
 function addOrChangeSera(name,valueName,value,isDown=false){
-	var monitor = document.querySelector("body > div:nth-child(1)");
-	monitor.innerHTML = "";
-	if(changeIfSeraExists(name,valueName,value)==false){
+
+	
+	if(true){
 		let Down = isDown ? " Down" : "";
-		console.log(Down);
 		let html = "<div> \
-								<div class='indicator grid-container hover"+Down+"'> \
-									<div class='def'>"+name+"</div> \
-									<div>"+toPascalCase(valueName)+"</div> \
-									<div>"+value+"C</div> \
-							</div> \
-							";
-		monitor.insertAdjacentHTML("beforeend",html);
+						<div class='indicator grid-container hover"+Down+"'> \
+							<div class='def'>"+name+"</div> \
+							<div>"+toPascalCase(valueName)+"</div> \
+							<div>"+value+"C</div> \
+						</div> \
+					</div>";
+							
+		monitor.innerHTML+=html;
 	}
+	
+	
 	var indicators = document.getElementsByClassName("indicators")[0].getElementsByClassName("indicator");
 	for(var i=0;i<indicators.length;i++){
 		let cells = indicators[i].getElementsByTagName("div");

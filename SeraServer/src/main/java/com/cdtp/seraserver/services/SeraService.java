@@ -16,6 +16,7 @@ public interface SeraService {
     public void addCommand(String employee, Map<String,String> command);
     public void addCommand(String employee, String valueName,String value);
     public void addCommandToAllEmployees(String valueName,String value);
-    public Map<String,String> removeCommand(String employee) throws GreenHouseNotFoundException;
+    public Map<String,String> getCommand(String employee) throws GreenHouseNotFoundException;
     public void controlConnection(int total);
+    public String getIpFromName(String name);
 }
