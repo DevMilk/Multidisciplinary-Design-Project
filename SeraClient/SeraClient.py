@@ -14,7 +14,7 @@ def notify(new):
 	global nextTimeToNotify
 	nextTimeToNotify = time.time()+sync_period
 	try:
-		data = requests.post(server, json = {"temperature": str(int(new))})
+		data = requests.post(server, json = {"temperature": str(int(round(new)))})
 		data = data.json()
 		sync_period = int(data["sync_period"])
 		return data["temperature"]
@@ -30,41 +30,53 @@ PARITY = serial.PARITY_NONE
 STOP_BITS = serial.STOPBITS_ONE
 BYTE_SIZE = serial.EIGHTBITS
 TIMEOUT = 0
-s = serial.Serial(
-    port=COM_PORT,\
-	write_timeout = 4, \
-    baudrate=BAUD_RATE,\
-    parity=PARITY,\
-    stopbits=STOP_BITS,\
-	write_timeout = 0, \
-    bytesize=BYTE_SIZE,\
-        timeout=TIMEOUT)
+s = None
 
 
 
 
 
-		
 while(1):
 	lastChange = "0"
 	#Döngü
-	while(1):
-		time.sleep(0.4)
-		try:
-				temperature = float(s.readline())
-		except:
-			print("com portu okumada hata")
-		print(temperature)
-		if(nextTimeToNotify<=time.time()):
-			isNewRequest = notify(temperature)
-			if(isNewRequest and int(lastChange) != int(isNewRequest)):
-				time.sleep(0.1)
-				print("İstenen Sıcaklık: ",isNewRequest)
-				
-				cevap = s.write(isNewRequest)
-				s.flush()
-				time.sleep(3)
-				lastChange = isNewRequest
+	try:
+		s = serial.Serial(
+		port=COM_PORT,\
+		write_timeout = 4, \
+		baudrate=BAUD_RATE,\
+		parity=PARITY,\
+		stopbits=STOP_BITS,\
+		bytesize=BYTE_SIZE,\
+			timeout=TIMEOUT)
+			
+		while(s.isOpen()):
+			time.sleep(0.35)
+			try:
+					temperature = float(s.readline())
+					s.reset_output_buffer()
+					s.reset_input_buffer()
+					
+					print(temperature)
+					if(nextTimeToNotify<=time.time()):
+						isNewRequest = notify(temperature)
+						if(isNewRequest and int(lastChange) != int(isNewRequest)):
+							time.sleep(0.1)
+							print("İstenen Sıcaklık: ",isNewRequest)
+							s.reset_output_buffer()
+							s.reset_input_buffer()
+							cevap = s.write(isNewRequest.encode())
+							s.flush()
+							time.sleep(0.35)
+							lastChange = isNewRequest
+			except:
+				pass
+	except:
+		time.sleep(0.1)
+		print("COM Port Bağlantısı Bekleniyor...")
+		
+
+
+
 			
 
 			
