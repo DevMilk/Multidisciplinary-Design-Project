@@ -12,5 +12,5 @@ public class CommandContext {
     @NonNull
     private String valuename;
     @NonNull
-    private int value;
+    private float value;
 }

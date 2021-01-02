@@ -14,9 +14,9 @@ def notify(new):
 	global nextTimeToNotify
 	nextTimeToNotify = time.time()+sync_period
 	try:
-		data = requests.post(server, json = {"temperature": str(int(round(new)))})
+		data = requests.post(server, json = {"temperature": str(new))})
 		data = data.json()
-		sync_period = int(data["sync_period"])
+		sync_period = float(data["sync_period"])
 		return data["temperature"]
 	except:
 		return False
@@ -59,7 +59,7 @@ while(1):
 					print(temperature)
 					if(nextTimeToNotify<=time.time()):
 						isNewRequest = notify(temperature)
-						if(isNewRequest and int(lastChange) != int(isNewRequest)):
+						if(isNewRequest and lastChange != isNewRequest):
 							time.sleep(0.1)
 							print("İstenen Sıcaklık: ",isNewRequest)
 							s.reset_output_buffer()

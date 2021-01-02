@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sera Monitor</title>
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat:900|Work+Sans:300" rel="stylesheet">
+</head>
+
+<body>
+<div class="indicators hover">
+	<div class="header">Monitor</div>
+	<div class="indicator grid-container hover">
+				<div class="def">Sera#1</div>
+				<div>Temperature</div>
+				<div>30C</div>
+				<div>Humidity</div>
+				<div>25%</div>
+	</div>
+
+	<div class="indicator grid-container hover">
+				<div class="def">Sera#2</div>
+				<div>Temperature</div>
+				<div>45C</div>
+				<div>Humidity</div>
+				<div>40%</div>
+	</div>
+
+</div>
+
+
+
+
+<div class="indicators hover">
+	<div class="header">Settings</div>
+	<div id="periodIndicator" class="indicator hover grid-container col2">
+		<div class="def">Period</div>
+		<div>-1</div>
+	</div>
+	<div id="timeoutIndicator" class="indicator hover grid-container col2">
+		<div class="def">Timeout</div>
+		<div>-1</div>
+	</div>
+</div>
+
+
+<div id="console">
+
+
+</div>
+</body>
+
+<script  type="text/javascript" src="script.js"></script>
+<script  type="text/javascript" src="eventListeners.js"></script>
+
+</html>

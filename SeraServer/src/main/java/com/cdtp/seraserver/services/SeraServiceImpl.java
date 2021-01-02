@@ -75,11 +75,13 @@ public class SeraServiceImpl implements SeraService{
         Map<String,String> aliveCopy = commands.get(employee);
         return aliveCopy;
     }
-    public void controlConnection(int total){
+    public void controlConnection(float total){
 
-        for(Map.Entry<String,GreenHouse> client : clients.entrySet())
-            client.getValue().setIsDown(client.getValue().getNextNotificationTime() +total < TimeService.getTime());
-
+        for(Map.Entry<String,GreenHouse> client : clients.entrySet()) {
+            long next = client.getValue().getNextNotificationTime() + (int)total;
+            long now = TimeService.getTime();
+            client.getValue().setIsDown(now > next);
+        }
     }
     public String getIpFromName(String name){
         for(Map.Entry<String,GreenHouse> client : clients.entrySet()){
