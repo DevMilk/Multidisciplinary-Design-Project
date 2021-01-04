@@ -47,7 +47,7 @@ public class SeraController {
     public ResponseEntity changeValue(@RequestBody(required = true) CommandContext requestBody) throws GreenHouseNotFoundException {
         //Clientlerle haberleşip onlara değiştirmelerini söylemeli.
         if(requestBody.getName()== null ||  requestBody.getValuename()==null)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not All Parameters not provided");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not All Parameters provided");
         String ip = seraService.getIpFromName(requestBody.getName());
         seraService.addCommand(ip,requestBody.getValuename(),Float.toString(requestBody.getValue()));
         System.out.println("Monitor requested "+requestBody.getValuename()+" as "+requestBody.getValue()+" for " +requestBody.getName());
@@ -59,6 +59,7 @@ public class SeraController {
     public ResponseEntity notification(HttpServletRequest request, @RequestBody(required = false) Map<String,String> valueMap) {
         String ip_address = getIpOfRequest(request);
         Map<String,String> response = new HashMap<>(2);
+        String name = valueMap.remove("name");
         GreenHouse client = null;
 
         try {
@@ -72,7 +73,10 @@ public class SeraController {
             //Kayıtlı Değilse:
 
             if(seraService.getClients().size()<seraService.getCapacity()){
-                seraService.addClient(new HashMap<>(),ip_address);
+                if(name!=null)
+                    seraService.addClient(new HashMap<>(),ip_address,name);
+                else
+                    seraService.addClient(new HashMap<>(),ip_address);
                 client = seraService.getClients().get(ip_address);
             }
             else

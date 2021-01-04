@@ -36,6 +36,11 @@ public class SeraServiceImpl implements SeraService{
         newSera.setName("Sera#"+clients.size());
         clients.put(ip,newSera);
     }
+    public void addClient(Map<String,String> valueMap, String ip,String Name){
+        GreenHouse newSera = new GreenHouse(valueMap,ip);
+        newSera.setName(Name);
+        clients.put(ip,newSera);
+    }
     public void changeClientValue(String ip, Map<String, String> valueMap){
         try {
             getClientByIp(ip).setValues(valueMap);

@@ -2,7 +2,7 @@ import serial
 import time
 import requests
 import json
-
+import getpass
 #Server Ayarı
 server = "http://25.45.128.215:8080/sera/notification"
 sync_period = -1
@@ -14,7 +14,7 @@ def notify(new):
 	global nextTimeToNotify
 	nextTimeToNotify = time.time()+sync_period
 	try:
-		data = requests.post(server, json = {"temperature": str(new))})
+		data = requests.post(server, json = {"temperature": str(new), "name":getpass.getuser()})
 		data = data.json()
 		sync_period = float(data["sync_period"])
 		return data["temperature"]

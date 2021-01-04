@@ -9,6 +9,7 @@ import java.util.Map;
 public interface SeraService {
 
     public void addClient(Map<String,String> valueMap, String ip);
+    public void addClient(Map<String,String> valueMap, String ip, String name);
     public int getCapacity();
     public Map<String,GreenHouse> getClients();
     public GreenHouse getClientByIp(String ip) throws GreenHouseNotFoundException;
