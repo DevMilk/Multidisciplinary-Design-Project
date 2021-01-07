@@ -14,4 +14,5 @@ System consist of 4 components: **Monitor Software**, **Server Software**, **Cli
 
 Softwares communicate with each other using HTTP method, sends data in JSON format.
 
-![](Screenshots/multip.gif)
+![](Screenshots/screenshot2.gif)
+![](Screenshots/screenshot.gif)
