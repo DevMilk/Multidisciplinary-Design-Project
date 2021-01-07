@@ -8,7 +8,7 @@ Uses **Hamachi** for creating a Virtual Private Network so only devices that reg
 
 ! Server is NOT running on web so management system is fully closed to the internet
 
-System consist of 4 components: **Monitor Software**, **Server Software**, **Client Software**, **Circuit Simulation** with Arduino software
+System consist of 4 components: **Monitor Software**, **Server Software**, **Client Software**, **Circuit Simulation with Arduino software**
 
 * **Monitor Software**: Developed using **HTML**, **CSS**, **Javascript**. Ajax Requests and DOM Manipulation used to show/request data dynamically. Can transmit temperature change requests to Client Software through Server Software. 
 * **Server Software**: Developed using **Java** ,Spring Boot Framework. Stores values, communication parameters and timing data; transmits temperature requests from monitor software to client software. Sends greenhouse temperature and availability data to monitor software.
