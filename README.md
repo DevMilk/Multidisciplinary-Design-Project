@@ -1,6 +1,9 @@
 # Multidisciplinary Design Project
  A GreenHouse System with team consisting multiple fields
  
+ ![](Screenshots/screenshot.png)
+
+
 Uses **Hamachi** for creating a Virtual Private Network so only devices that registered to hamachi network can access to server. Also Zero One Tier can be used to allow  system control from mobile devices.
 
 ! Server is NOT running on web so management system is fully closed to the internet
@@ -14,5 +17,3 @@ System consist of 4 components: **Monitor Software**, **Server Software**, **Cli
 
 Softwares communicate with each other using HTTP method, sends data in JSON format.
 
-![](Screenshots/screenshot2.png)
-![](Screenshots/screenshot.png)
