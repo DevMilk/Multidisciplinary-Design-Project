@@ -2,7 +2,7 @@
  
  ![](Screenshots/screenshot.png)
 
- A GreenHouse System with team consisting multiple fields
+ A GreenHouse System developed with a team consisting multiple fields
 
 Uses **Hamachi** for creating a Virtual Private Network so only devices that registered to hamachi network can access to server. Also Zero One Tier can be used to allow  system control from mobile devices.
 
