@@ -1,4 +1,4 @@
-# Multidisciplinary Design Project
+# Remote GreenHouse Management System
  
  ![](Screenshots/screenshot.png)
 
